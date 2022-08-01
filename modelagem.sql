@@ -52,6 +52,7 @@ CREATE TABLE "public.products" (
 	"price" integer NOT NULL,
 	"mainPhoto" TEXT NOT NULL,
 	"categoryId" integer NOT NULL,
+	"sizeId" integer NOT NULL,
 	CONSTRAINT "products_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -83,7 +84,6 @@ CREATE TABLE "public.categories" (
 CREATE TABLE "public.sizes" (
 	"id" serial NOT NULL,
 	"name" TEXT NOT NULL,
-	"categoryId" integer NOT NULL,
 	CONSTRAINT "sizes_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -96,7 +96,6 @@ CREATE TABLE "public.purchases" (
 	"customerId" integer NOT NULL,
 	"productId" integer NOT NULL,
 	"quantity" integer NOT NULL,
-	"sizeId" integer,
 	"adressId" integer NOT NULL,
 	"openDate" TIMESTAMP NOT NULL,
 	"statusId" integer NOT NULL,
@@ -114,6 +113,37 @@ CREATE TABLE "public.status" (
 ) WITH (
   OIDS=FALSE
 );
+
+
+
+
+ALTER TABLE "customerAdresses" ADD CONSTRAINT "customerAdresses_fk0" FOREIGN KEY ("customerId") REFERENCES "users"("id");
+ALTER TABLE "customerAdresses" ADD CONSTRAINT "customerAdresses_fk1" FOREIGN KEY ("cityId") REFERENCES "cities"("id");
+
+ALTER TABLE "cities" ADD CONSTRAINT "cities_fk0" FOREIGN KEY ("stateId") REFERENCES "state"("id");
+
+
+ALTER TABLE "products" ADD CONSTRAINT "products_fk0" FOREIGN KEY ("categoryId") REFERENCES "categories"("id");
+ALTER TABLE "products" ADD CONSTRAINT "products_fk1" FOREIGN KEY ("sizeId") REFERENCES "sizes"("id");
+
+ALTER TABLE "productsPhotos" ADD CONSTRAINT "productsPhotos_fk0" FOREIGN KEY ("productId") REFERENCES "products"("id");
+
+
+
+ALTER TABLE "purchases" ADD CONSTRAINT "purchases_fk0" FOREIGN KEY ("customerId") REFERENCES "users"("id");
+ALTER TABLE "purchases" ADD CONSTRAINT "purchases_fk1" FOREIGN KEY ("productId") REFERENCES "products"("id");
+ALTER TABLE "purchases" ADD CONSTRAINT "purchases_fk2" FOREIGN KEY ("adressId") REFERENCES "customerAdresses"("id");
+ALTER TABLE "purchases" ADD CONSTRAINT "purchases_fk3" FOREIGN KEY ("statusId") REFERENCES "status"("id");
+
+
+
+
+
+
+
+
+
+
 
 
 
